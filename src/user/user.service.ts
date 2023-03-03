@@ -3,7 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { validate } from 'class-validator';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserEntity } from './user.entity';
+import { UserEntity, UserRole } from './user.entity';
+import { LoginUserDto } from './dto/login-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -50,5 +52,22 @@ export class UserService {
             const savedUser = await this.userRepository.save(newUser);
             return savedUser;
         }
+    }
+
+    async login(loginData: LoginUserDto): Promise<UserEntity>{
+        const user = await this.userRepository.findOne({
+            where:{
+                email: loginData.email
+            }
+        });
+
+        if(!user) return null;
+
+        const comparePassword = await bcrypt.compare(loginData.password, user.password);
+        if(comparePassword){
+            return user;
+        }
+
+        return null;
     }
 }

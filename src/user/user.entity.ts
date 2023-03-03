@@ -41,14 +41,14 @@ export class UserEntity {
         enum: UserStatus,
         default: UserStatus.INACTIVATE
     })
-    status: UserStatus;
+    status: UserStatus = UserStatus.INACTIVATE;
 
     @Column({
         type: 'enum',
         enum: UserRole,
         default: UserRole.USER
     })
-    role: UserRole;
+    role: UserRole = UserRole.USER;
 
     @CreateDateColumn()
     createdDate: Date
