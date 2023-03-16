@@ -1,27 +1,35 @@
+# compiled output
+/dist
+/node_modules
+
 # Logs
 logs
 *.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
 .DS_Store
 
-npm-debug.log*
+# Tests
+/coverage
+/.nyc_output
 
-# Dependency directory
-node_modules
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-# Optional npm cache directory
-.npm
-
-#IDEs
-.idea
-
-#config files
-ormconfig.json
-src/config.ts
-
-# code testing coverage
-coverage
-
-
-dist
-
-package-lock.json
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
