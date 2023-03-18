@@ -18,32 +18,29 @@ export class AllExceptionsFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         let httpStatus;
         let responseBody;
-  
-        // let httpStatus =
-        // exception instanceof HttpException
-        //     ? exception.getStatus()
-        //     : HttpStatus.INTERNAL_SERVER_ERROR;
-  
-        // let responseBody = {
-        //     status: 'error',
-        //     message: '',
-        //     error: exception.
-        // };
 
         if(exception instanceof HttpException){
             httpStatus = exception.getStatus();
-            responseBody = {
-                status: 'error',
-                message: exception.getResponse(),
-            };
+            const exceptionResponse = exception.getResponse();
+            if(typeof exceptionResponse == 'string'){
+                responseBody = {
+                    status: 'error',
+                    error: exceptionResponse
+                };
+            }else if(typeof exceptionResponse == 'object'){
+                responseBody = {
+                    status: 'error',
+                    ...exceptionResponse
+                };
+            }
         }
         
         else if(exception.name == 'ValidationError'){
             httpStatus = HttpStatus.BAD_REQUEST;
             responseBody = {
                 status: 'error',
-                message: 'Validation Error',
-                error: Object.values(exception.errors).map((e: any) => e.message)
+                error: 'Validation Error',
+                message: Object.values(exception.errors).map((e: any) => e.message)
             };
         }
 
@@ -51,8 +48,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
             httpStatus = HttpStatus.BAD_REQUEST;
             responseBody = {
                 status: 'error',
-                message: 'duplicate value',
-                error: Object.keys(exception.keyValue).map(e => `${e} has been duplicated`)
+                error: 'duplicate value',
+                message: Object.keys(exception.keyValue).map(e => `${e} has been duplicated`)
             };
         }
 
@@ -60,7 +57,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
             responseBody = {
                 status: 'error',
-                message: 'Internal server error'
+                error: 'Internal server error'
             };
         }
   
