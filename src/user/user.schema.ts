@@ -10,7 +10,7 @@ export const UserSchema = new Schema(
             trim: 'true',
             match: [
                 /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                'wrong email format',
+                'email is invalid',
             ],
         },
         password: {
