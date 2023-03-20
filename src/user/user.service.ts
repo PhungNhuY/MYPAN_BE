@@ -28,7 +28,7 @@ export class UserService {
         // }
     }
 
-    async login(loginData: LoginDto){
+    async login(loginData: LoginDto):Promise<IUserResponse>{
         // find user in database
         const user = await this.userModel.findOne({ email: loginData.email }).select('+password');
         if(!user) throw new BadRequestException(['user name or password does not match']);
