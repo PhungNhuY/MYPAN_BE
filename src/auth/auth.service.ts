@@ -27,8 +27,14 @@ export class AuthService {
             await this.jwtService.generateToken(
                 payload, 
                 process.env.ACCESS_TOKEN_SECRET, 
-                '1h'
+                process.env.ACCESS_TOKEN_LIFE,
             );
-        return buildSuccessResponse({user, accesstoken});
+        const refreshToken = 
+            await this.jwtService.generateToken(
+                payload,
+                process.env.REFRESH_TOKEN_SECRET,
+                process.env.REFRESH_TOKEN_LIFE
+            );
+        return buildSuccessResponse({user, accesstoken, refreshToken});
     }
 }
