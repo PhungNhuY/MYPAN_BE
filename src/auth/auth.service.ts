@@ -4,7 +4,7 @@ import { IUserResponse } from 'src/user/dto/user-response.dto';
 import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from 'src/jwt/jwt.service';
-import { ICustomResponse, buildSuccessResponse } from 'src/custom-response';
+import { ICustomResponse, buildSuccessResponse } from 'src/common/custom-response';
 
 @Injectable()
 export class AuthService {
