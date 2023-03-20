@@ -1,9 +1,11 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IUser } from './user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { IUserResponse } from './dto/user-response.dto';
+import { LoginDto } from 'src/auth/dto/login.dto';
+import {compare} from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -24,6 +26,18 @@ export class UserService {
         // } catch (error) {
         //     console.log(error);
         // }
+    }
+
+    async login(loginData: LoginDto){
+        // find user in database
+        const user = await this.userModel.findOne({ email: loginData.email }).select('+password');
+        if(!user) throw new BadRequestException(['user name or password does not match']);
+
+        // compare password
+        const isMatch = await compare(loginData.password, user.password);
+        if(!isMatch) throw new BadRequestException(['user name or password does not match']);
+
+        return this.buildUserResponse(user);
     }
 
     private buildUserResponse(userData: IUser): IUserResponse{
