@@ -15,3 +15,11 @@ export function buildSuccessResponse(data): ICustomResponse{
         data
     };
 }
+
+export function buildErrorResponse(error: string, message?: string[]): ICustomResponse{
+    return {
+        status: statusEnum.error,
+        error,
+        message
+    };
+}
