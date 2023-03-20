@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { buildSuccessResponse } from 'src/common/custom-response';
 import { Response } from 'express';
 import { JwtService } from 'src/jwt/jwt.service';
+import { EmailService } from 'src/email/email.service';
 
 @Controller('auth')
 export class AuthController {
@@ -12,18 +13,25 @@ export class AuthController {
     constructor(
         private readonly authService: AuthService,
         private readonly jwtService: JwtService,
+        private readonly mailService: EmailService
     ){}
 
     @UsePipes(new ValidationPipe())
     @Post('register')
     async register(@Body() registerData: CreateUserDto){
-        return buildSuccessResponse(await this.authService.register(registerData));
+        const user = await this.authService.register(registerData);
+
+        // send mail
+        await this.mailService.sendUserConfirmation(user.email, '1234');
+
+        return buildSuccessResponse(user);
     }
 
     @UsePipes(new ValidationPipe())
     @Post('login')
     @HttpCode(200)
     async login(@Body() loginData: LoginDto, @Res({ passthrough: true }) res: Response){
+        
         const user = await this.authService.login(loginData);
         const payload = {
             id: user.id,
@@ -53,6 +61,7 @@ export class AuthController {
                 path: '/auth/refresh',
             })
         ;
+
         return buildSuccessResponse({user, accesstoken, refreshToken});
     }
 }
