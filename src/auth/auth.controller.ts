@@ -1,17 +1,17 @@
 import { Body, Controller, HttpCode, Post, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { AuthService } from './auth.service';
 import { buildSuccessResponse } from 'src/common/custom-response';
 import { Response } from 'express';
 import { JwtService } from 'src/jwt/jwt.service';
 import { EmailService } from 'src/email/email.service';
+import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 export class AuthController {
 
     constructor(
-        private readonly authService: AuthService,
+        private readonly userService: UserService,
         private readonly jwtService: JwtService,
         private readonly mailService: EmailService
     ){}
@@ -19,7 +19,7 @@ export class AuthController {
     @UsePipes(new ValidationPipe())
     @Post('register')
     async register(@Body() registerData: CreateUserDto){
-        const user = await this.authService.register(registerData);
+        const user = await this.userService.create(registerData);
 
         // gen token
         const payload = {
@@ -36,7 +36,7 @@ export class AuthController {
         // send mail
         await this.mailService.sendUserConfirmation(user.email, confirmtoken);
 
-        return buildSuccessResponse(user);
+        return buildSuccessResponse({user});
     }
 
     @UsePipes(new ValidationPipe())
@@ -44,7 +44,7 @@ export class AuthController {
     @HttpCode(200)
     async login(@Body() loginData: LoginDto, @Res({ passthrough: true }) res: Response){
         
-        const user = await this.authService.login(loginData);
+        const user = await this.userService.login(loginData);
         const payload = {
             id: user.id,
             email: user.email,
@@ -63,11 +63,11 @@ export class AuthController {
             );
 
         res
-            .cookie('access-token', accesstoken, {
+            .cookie('accesstoken', accesstoken, {
                 httpOnly: true,
                 expires: new Date(253402300799999), // Fri Dec 31 9999 23:59:59 GMT+0000
             })
-            .cookie('refresh-token', refreshToken, {
+            .cookie('refreshtoken', refreshToken, {
                 httpOnly: true,
                 expires: new Date(253402300799999), // Fri Dec 31 9999 23:59:59 GMT+0000
                 path: '/auth/refresh',

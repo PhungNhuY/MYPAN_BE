@@ -9,7 +9,7 @@ export interface ICustomResponse{
     data?: object;
 }
 
-export function buildSuccessResponse(data): ICustomResponse{
+export function buildSuccessResponse(data: object): ICustomResponse{
     return {
         status: statusEnum.success,
         data

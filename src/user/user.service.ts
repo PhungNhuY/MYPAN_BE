@@ -13,6 +13,11 @@ export class UserService {
         @InjectModel('User') private readonly userModel: Model<IUser>
     ){}
 
+    async findOne(option: object){
+        const user = await this.userModel.findOne(option);
+        return this.buildUserResponse(user);
+    }
+
     async create(createUserData: CreateUserDto):Promise<IUserResponse>{
         // try {
         const {email, password, fullname, avatar_link} = createUserData;

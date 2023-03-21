@@ -8,14 +8,5 @@ import { EmailService } from 'src/email/email.service';
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly userService: UserService
     ){}
-
-    async register(createUserData: CreateUserDto): Promise<IUserResponse>{
-        return this.userService.create(createUserData);
-    }
-
-    async login(loginData: LoginDto):Promise<IUserResponse>{
-        return await this.userService.login(loginData);
-    }
 }

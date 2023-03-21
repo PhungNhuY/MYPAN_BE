@@ -1,11 +1,22 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { JwtService } from './jwt.service';
 
 @Injectable()
 export class JwtAuthenticationGuard implements CanActivate {
-    canActivate(
+
+    constructor(
+        private readonly jwtService: JwtService,
+    ){}
+
+    async canActivate(
         context: ExecutionContext,
-    ): boolean | Promise<boolean> | Observable<boolean> {
-        return false;
+    ):Promise<boolean>{
+        const request = context.switchToHttp().getRequest();
+        const accesstoken = request.cookies['accesstoken'];
+        request.user = await this.jwtService.verifyToken(
+            accesstoken, 
+            process.env.ACCESS_TOKEN_SECRET
+        );
+        return true;
     }
 }
