@@ -21,8 +21,20 @@ export class AuthController {
     async register(@Body() registerData: CreateUserDto){
         const user = await this.authService.register(registerData);
 
+        // gen token
+        const payload = {
+            id: user.id,
+            email: user.email,
+        };
+        const confirmtoken = 
+            await this.jwtService.generateToken(
+                payload, 
+                process.env.CONFIRM_TOKEN_SECRET, 
+                process.env.CONFIRM_TOKEN_LIFE,
+            );
+
         // send mail
-        await this.mailService.sendUserConfirmation(user.email, '1234');
+        await this.mailService.sendUserConfirmation(user.email, confirmtoken);
 
         return buildSuccessResponse(user);
     }
