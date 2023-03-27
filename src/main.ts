@@ -9,6 +9,7 @@ async function bootstrap() {
     const httpAdapter = app.get(HttpAdapterHost);
     app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
+    app.enableCors();
     app.use(cookieParser());
 
     await app.listen(process.env.PORT || 3000);
