@@ -62,17 +62,17 @@ export class AuthController {
                 process.env.REFRESH_TOKEN_LIFE
             );
 
-        res
-            .cookie('accesstoken', accesstoken, {
-                httpOnly: true,
-                expires: new Date(253402300799999), // Fri Dec 31 9999 23:59:59 GMT+0000
-            })
-            .cookie('refreshtoken', refreshToken, {
-                httpOnly: true,
-                expires: new Date(253402300799999), // Fri Dec 31 9999 23:59:59 GMT+0000
-                path: '/auth/refresh',
-            })
-        ;
+        // res
+        //     .cookie('accesstoken', accesstoken, {
+        //         httpOnly: true,
+        //         expires: new Date(253402300799999), // Fri Dec 31 9999 23:59:59 GMT+0000
+        //     })
+        //     .cookie('refreshtoken', refreshToken, {
+        //         httpOnly: true,
+        //         expires: new Date(253402300799999), // Fri Dec 31 9999 23:59:59 GMT+0000
+        //         path: '/auth/refresh',
+        //     })
+        // ;
 
         return buildSuccessResponse({user, accesstoken, refreshToken});
     }
