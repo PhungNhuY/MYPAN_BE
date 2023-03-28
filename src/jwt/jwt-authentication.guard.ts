@@ -12,7 +12,9 @@ export class JwtAuthenticationGuard implements CanActivate {
         context: ExecutionContext,
     ):Promise<boolean>{
         const request = context.switchToHttp().getRequest();
-        const accesstoken = request.cookies['accesstoken'];
+        const accesstoken = request.cookies['accesstoken'] || request.headers['accesstoken'];
+        console.log(accesstoken);
+        
         request.user = await this.jwtService.verifyToken(
             accesstoken, 
             process.env.ACCESS_TOKEN_SECRET
