@@ -11,7 +11,11 @@ export class AppController {
 
     @Get('success')
     successResponse(){
-        return buildSuccessResponse({});
+        return buildSuccessResponse({
+            list: 'list',
+            of: 'of',
+            data:'data'
+        });
     }
 
     @Get('error')
