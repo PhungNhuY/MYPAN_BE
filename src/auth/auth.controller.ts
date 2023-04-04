@@ -55,7 +55,7 @@ export class AuthController {
                 process.env.ACCESS_TOKEN_SECRET, 
                 process.env.ACCESS_TOKEN_LIFE,
             );
-        const refreshToken = 
+        const refreshtoken = 
             await this.jwtService.generateToken(
                 payload,
                 process.env.REFRESH_TOKEN_SECRET,
@@ -74,6 +74,6 @@ export class AuthController {
         //     })
         // ;
 
-        return buildSuccessResponse({user, accesstoken, refreshToken});
+        return buildSuccessResponse({user, accesstoken, refreshtoken});
     }
 }
