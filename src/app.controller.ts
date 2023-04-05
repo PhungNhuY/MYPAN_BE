@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Get } from '@nestjs/common';
+import { BadRequestException, Controller, Get, UnauthorizedException } from '@nestjs/common';
 import { buildSuccessResponse } from './common/custom-response';
 
 @Controller()
@@ -21,5 +21,10 @@ export class AppController {
     @Get('error')
     errorResponse(){
         throw new BadRequestException(['list', 'of', 'error', 'message']);
+    }
+
+    @Get('unauth')
+    unauthResponse(){
+        throw new UnauthorizedException();
     }
 }
