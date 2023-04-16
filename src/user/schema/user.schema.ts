@@ -9,6 +9,11 @@ export enum EUserStatus {
     deleted = 'deleted'
 }
 
+export enum EUserRole{
+    user = 'user',
+    admin = 'admin'
+}
+
 export const UserSchema = new Schema(
     {
         email: {
@@ -27,10 +32,6 @@ export const UserSchema = new Schema(
             minLength: [8, 'password too short'],
             select: false,
         },
-        // otp:{
-        //     type: String,
-        //     select: false,
-        // },
         fullname: {
             type: String,
             // required: [true, "missing fullname"],
@@ -44,10 +45,10 @@ export const UserSchema = new Schema(
         role: {
             type: String,
             enum: {
-                values: ['user', 'admin'],
+                values: Object.keys(EUserRole),
                 message: 'Role {VALUE} is invalid',
             },
-            default: 'user',
+            default: EUserRole.user,
         },
         status: {
             type: String,
@@ -71,7 +72,3 @@ UserSchema.pre('save', async function(next){
     }
     next();
 });
-
-// UserSchema.methods.matchPassword = async function(password){
-//     return await bcrypt.compare(password, this.password);
-// };
