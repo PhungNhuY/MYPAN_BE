@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { IUserResponse } from './dto/user-response.dto';
 import { LoginDto } from 'src/auth/dto/login.dto';
 import {compare} from 'bcrypt';
+import { EUserStatus } from './schema/user.schema';
 
 @Injectable()
 export class UserService {
@@ -41,6 +42,16 @@ export class UserService {
         // compare password
         const isMatch = await compare(loginData.password, user.password);
         if(!isMatch) throw new BadRequestException(['user name or password does not match']);
+
+        return this.buildUserResponse(user);
+    }
+
+    async updateStatusById(id: string, status: EUserStatus){
+        const user = await this.userModel.findByIdAndUpdate(
+            id, 
+            {status},
+            { new: true, runValidators: true}
+        );
 
         return this.buildUserResponse(user);
     }

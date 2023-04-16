@@ -1,6 +1,14 @@
 import {Schema} from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
+export enum EUserStatus {
+    inactivated = 'inactivated',
+    activated = 'activated',
+    locked = 'locked',
+    banned = 'banned',
+    deleted = 'deleted'
+}
+
 export const UserSchema = new Schema(
     {
         email: {
@@ -44,10 +52,10 @@ export const UserSchema = new Schema(
         status: {
             type: String,
             enum: {
-                values: ['inactivated', 'activated', 'locked', 'banned', 'deleted'],
+                values: Object.keys(EUserStatus),
                 message: 'Status {VALUE} is invalid',
             },
-            default: 'inactivated',
+            default: EUserStatus.inactivated,
         },
     },
     {

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
+import { IPayload } from 'src/auth/interfaces';
 
 @Injectable()
 export class JwtService {
@@ -33,7 +34,7 @@ export class JwtService {
                 if(error){
                     return reject(error);
                 }
-                resolve(payload);
+                resolve(payload as IPayload);
             });
         });
     }
