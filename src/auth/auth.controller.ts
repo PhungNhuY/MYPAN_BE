@@ -1,8 +1,7 @@
-import { Body, Controller, Get, HttpCode, Post, Query, Res, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Headers, HttpCode, Post, Query } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { buildSuccessResponse } from 'src/common/custom-response';
-import { Response } from 'express';
 import { JwtService } from 'src/jwt/jwt.service';
 import { EmailService } from 'src/email/email.service';
 import { UserService } from 'src/user/user.service';
@@ -79,4 +78,26 @@ export class AuthController {
         return buildSuccessResponse(user);
     }
 
+    @Get('refresh')
+    @HttpCode(200)
+    async refresh(@Headers() headers){
+        const refreshtoken = headers['refreshtoken'];
+        // verify token
+        const user = await this.jwtService.verifyToken(
+            refreshtoken, 
+            process.env.REFRESH_TOKEN_SECRET
+        );
+        
+        // gen token
+        const payload: IPayload = {
+            id: user.id,
+            email: user.email,
+        };
+        const accesstoken = await this.jwtService.generateToken(
+            payload, 
+            process.env.ACCESS_TOKEN_SECRET, 
+            process.env.ACCESS_TOKEN_LIFE,
+        );
+        return buildSuccessResponse({accesstoken});
+    }
 }

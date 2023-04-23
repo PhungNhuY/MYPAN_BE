@@ -27,7 +27,7 @@ export class JwtService {
     /*
     *   ignoreExp = true when verify to create new accesstoken
     */
-    public verifyToken(token, secretKey, ignoreExp = false){
+    public verifyToken(token, secretKey, ignoreExp = false): Promise<IPayload>{
         const option = ignoreExp ? {ignoreExpiration: true} : {};
         return new Promise((resolve, reject) => {
             jwt.verify(token, secretKey, option, (error, payload) => {
