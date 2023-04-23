@@ -35,7 +35,8 @@ export const UserSchema = new Schema(
         fullname: {
             type: String,
             required: [true, 'missing fullname'],
-            default: 'default name',
+            minLength:[3, 'name too short'],
+            maxLength:[50, 'name too long']
         },
         avatar_link: {
             type: String,

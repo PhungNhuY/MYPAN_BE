@@ -20,6 +20,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         let httpStatus;
         let responseBody;
 
+        console.log('--->>>exception filter');
         console.log(exception);
 
         if(exception instanceof HttpException){
