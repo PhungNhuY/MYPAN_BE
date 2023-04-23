@@ -18,7 +18,6 @@ export class AuthController {
         private readonly mailService: EmailService
     ){}
 
-    @UsePipes(new ValidationPipe())
     @Post('register')
     async register(@Body() registerData: CreateUserDto){
         const user = await this.userService.create(registerData);
@@ -41,10 +40,9 @@ export class AuthController {
         return buildSuccessResponse({user});
     }
 
-    @UsePipes(new ValidationPipe())
     @Post('login')
     @HttpCode(200)
-    async login(@Body() loginData: LoginDto, @Res({ passthrough: true }) res: Response){
+    async login(@Body() loginData: LoginDto){
         
         const user = await this.userService.login(loginData);
         const payload: IPayload = {
@@ -63,18 +61,6 @@ export class AuthController {
                 process.env.REFRESH_TOKEN_SECRET,
                 process.env.REFRESH_TOKEN_LIFE
             );
-
-        // res
-        //     .cookie('accesstoken', accesstoken, {
-        //         httpOnly: true,
-        //         expires: new Date(253402300799999), // Fri Dec 31 9999 23:59:59 GMT+0000
-        //     })
-        //     .cookie('refreshtoken', refreshToken, {
-        //         httpOnly: true,
-        //         expires: new Date(253402300799999), // Fri Dec 31 9999 23:59:59 GMT+0000
-        //         path: '/auth/refresh',
-        //     })
-        // ;
 
         return buildSuccessResponse({user, accesstoken, refreshtoken});
     }

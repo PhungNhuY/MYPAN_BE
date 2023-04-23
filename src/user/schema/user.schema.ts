@@ -34,12 +34,15 @@ export const UserSchema = new Schema(
         },
         fullname: {
             type: String,
-            // required: [true, "missing fullname"],
+            required: [true, 'missing fullname'],
             default: 'default name',
         },
         avatar_link: {
             type: String,
-            // default: '/images/default_avatar.png',
+            match: [
+                /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
+                'invalid url',
+            ],
             default: null,
         },
         role: {
