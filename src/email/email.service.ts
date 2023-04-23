@@ -20,7 +20,7 @@ export class EmailService {
                     url,
                 },
             });
-            console.log(`sent to ${email}`);
+            console.log(`mail sent to ${email}`);
         } catch (error) {
             console.log('--->>> mailing service error: ', error);
         }

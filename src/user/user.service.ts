@@ -20,7 +20,6 @@ export class UserService {
     }
 
     async create(createUserData: CreateUserDto):Promise<IUserResponse>{
-        // try {
         const {email, password, fullname, avatar_link} = createUserData;
         const newUser = new this.userModel({
             email, 
@@ -29,9 +28,6 @@ export class UserService {
             avatar_link
         });
         return this.buildUserResponse(await newUser.save());
-        // } catch (error) {
-        //     console.log(error);
-        // }
     }
 
     async login(loginData: LoginDto):Promise<IUserResponse>{
