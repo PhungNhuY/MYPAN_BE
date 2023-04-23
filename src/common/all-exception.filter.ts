@@ -44,7 +44,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
             );
         }
 
-        else if(exception.name == 'JsonWebTokenError'){
+        else if(exception.name == 'JsonWebTokenError' || exception.name == 'TokenExpiredError'){
             httpStatus = HttpStatus.UNAUTHORIZED;
             responseBody = buildErrorResponse('Unauthorized');
         }
