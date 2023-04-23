@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IPost } from './post.interface';
 import { CreatePostDto } from './dtos/create-post.dto';
+import { AuthorDto } from './dtos/author.dto';
 
 @Injectable()
 export class PostService {
@@ -15,11 +16,8 @@ export class PostService {
         return posts;
     }
 
-    async create(createPostData: CreatePostDto){
-        const {author} = createPostData;
-        const newPost = new this.postModel({
-            author,
-        });
+    async create(createPostData: CreatePostDto & AuthorDto){
+        const newPost = new this.postModel(createPostData);
         return await newPost.save();
     }
 }
