@@ -26,6 +26,15 @@ export const UserSchema = new Schema(
                 'email is invalid',
             ],
         },
+        username:{
+            type: String,
+            required: true,
+            unique: true,
+            match:[
+                /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
+                'username is invalid'
+            ],
+        },
         password: {
             type: String,
             required: [true, 'missing password'],

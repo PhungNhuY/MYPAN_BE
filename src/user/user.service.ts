@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IUser } from './user.interface';
@@ -20,9 +20,10 @@ export class UserService {
     }
 
     async create(createUserData: CreateUserDto):Promise<IUserResponse>{
-        const {email, password, fullname, avatar_link} = createUserData;
+        const {email, username, password, fullname, avatar_link} = createUserData;
         const newUser = new this.userModel({
             email, 
+            username,
             password,
             fullname,
             avatar_link
@@ -53,10 +54,11 @@ export class UserService {
     }
 
     private buildUserResponse(userData: IUser): IUserResponse{
-        const {id, email, fullname, avatar_link, role, status, createdAt, updatedAt} = userData;
+        const {id, email, username, fullname, avatar_link, role, status, createdAt, updatedAt} = userData;
         const response: IUserResponse = {
             id,
             email,
+            username,
             fullname,
             avatar_link,
             role,
