@@ -18,7 +18,7 @@ export class PostService {
     }
 
     async findById(id: string){
-        const post = await this.postModel.findById(id);
+        const post = await this.postModel.findById(id).populate('author');
         return post;
     }
 

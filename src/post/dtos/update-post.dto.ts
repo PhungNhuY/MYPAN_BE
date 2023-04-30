@@ -4,9 +4,12 @@ export interface UpdatePostDto{
     imageCoverLink?: string;
     ration?: number;
     time?: number;
-    ingredients?: string[];
+    ingredients: [{
+        name: string;
+        quantity: string;
+    }];
     steps?: [{
         content: string;
-        imageLink?: string;
+        imageLink?: string[];
     }];
 }

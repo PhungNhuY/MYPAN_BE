@@ -34,7 +34,12 @@ export const PostSchema = new Schema(
             max: [43200, 'max 43200 minute'],
         },
         ingredients:[{
-            type: String,
+            name: {
+                type: String,
+            },
+            quantity: {
+                type: String,
+            }
         }],
         steps:[{
             content:{
@@ -42,13 +47,13 @@ export const PostSchema = new Schema(
                 required: true,
                 maxLength: [10000, 'step too long'],
             },
-            imageLink:{
+            imageLink:[{
                 type: String,
                 match: [
                     /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
                     'invalid url',
-                ],
-            }
+                ]
+            }],
         }],
     },
     {
