@@ -33,32 +33,48 @@ export const PostSchema = new Schema(
             min: [1, 'min 1 minute'],
             max: [43200, 'max 43200 minute'],
         },
-        ingredients:[{
-            name: {
-                type: String,
-            },
-            quantity: {
-                type: String,
-            }
-        }],
+        ingredients:{
+            type: [{
+                _id: false,
+                name: {
+                    type: String,
+                },
+                quantity: {
+                    type: String,
+                }
+            }],
+            validate: [IngreLimit, 'Tối đa 100 nguyên liệu'],
+        },
         steps:[{
+            _id: false,
             content:{
                 type: String,
                 required: true,
                 maxLength: [10000, 'step too long'],
             },
-            imageLink:[{
-                type: String,
-                match: [
-                    /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
-                    'invalid url',
-                ]
-            }],
+            imageLink:{
+                type: [{
+                    type: String,
+                    match: [
+                        /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
+                        'invalid url',
+                    ]
+                }],
+                validate: [ImageEachStepLimit, 'Tối đa 3 ảnh minh họa cho một bước'],
+            },
         }],
     },
     {
         timestamps: true,
     }
 );
+
+function ImageEachStepLimit(val) {
+    return val.length <= 3;
+}
+
+function IngreLimit(val) {
+    return val.length <= 100;
+}
 
 PostSchema.index({author: 1, name: 1}, {unique: true});
