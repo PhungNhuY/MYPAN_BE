@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
 import { EmailModule } from './email/email.module';
+import { CollectionModule } from './collection/collection.module';
 
 @Module({
     imports: [
@@ -17,6 +18,7 @@ import { EmailModule } from './email/email.module';
         AuthModule,
         PostModule,
         EmailModule,
+        CollectionModule,
     ],
     controllers: [AppController],
 })
