@@ -59,7 +59,7 @@ export const UserSchema = new Schema(
             type: String,
             enum: {
                 values: Object.keys(EUserRole),
-                message: 'Role {VALUE} is invalid',
+                message: 'Role \'{VALUE}\' is invalid',
             },
             default: EUserRole.user,
         },
@@ -67,7 +67,7 @@ export const UserSchema = new Schema(
             type: String,
             enum: {
                 values: Object.keys(EUserStatus),
-                message: 'Status {VALUE} is invalid',
+                message: 'Status \'{VALUE}\' is invalid',
             },
             default: EUserStatus.inactivated,
         },

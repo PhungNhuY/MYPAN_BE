@@ -3,6 +3,7 @@ import { CollectionController } from './collection.controller';
 import { CollectionService } from './collection.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CollectionSchema } from './schema/collection.schema';
+import { JwtService } from 'src/jwt/jwt.service';
 
 @Module({
     imports: [
@@ -11,6 +12,6 @@ import { CollectionSchema } from './schema/collection.schema';
         ]),
     ],
     controllers: [CollectionController],
-    providers: [CollectionService]
+    providers: [CollectionService, JwtService]
 })
 export class CollectionModule {}
