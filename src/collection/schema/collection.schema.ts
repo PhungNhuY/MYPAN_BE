@@ -32,7 +32,7 @@ export const CollectionSchema = new Schema(
         },
         posts: [{
             type: String,
-            ref: 'post',
+            ref: 'Post',
         }],
         category: {
             type: String,
@@ -50,6 +50,9 @@ export const CollectionSchema = new Schema(
             },
             required: [true, 'missing collection status'],
         }
+    },
+    {
+        timestamps: true,
     }
 );
 

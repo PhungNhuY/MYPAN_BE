@@ -6,5 +6,5 @@ export interface CreateCollectionDto {
     imageCoverLink?: string;
     posts: string;
     category: ECollectionCategory;
-    status: ECollectionStatus.activated | ECollectionStatus.inactivated;
+    status: ECollectionStatus;
 }
