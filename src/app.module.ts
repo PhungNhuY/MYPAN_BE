@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
 import { EmailModule } from './email/email.module';
 import { CollectionModule } from './collection/collection.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { CollectionModule } from './collection/collection.module';
         PostModule,
         EmailModule,
         CollectionModule,
+        CloudinaryModule,
     ],
     controllers: [AppController],
 })
