@@ -5,4 +5,5 @@ export interface UpdateUserDto{
     fullname?: string;
     avatar_link?: string;
     status?: string;
+    imageCoverLink?: string;
 }

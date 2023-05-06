@@ -40,7 +40,8 @@ export class UserController {
             avatar_link,
             fullname,
             password,
-            status
+            status,
+            imageCoverLink,
         } = updateUserData;
 
         const user = await this.userService.updateWithAuth(
@@ -51,7 +52,8 @@ export class UserController {
                 avatar_link,
                 fullname,
                 password,
-                status
+                status,
+                imageCoverLink
             }
         );
 

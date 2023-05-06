@@ -21,13 +21,21 @@ export class UserService {
     }
 
     async create(createUserData: CreateUserDto):Promise<IUserResponse>{
-        const {email, username, password, fullname, avatar_link} = createUserData;
+        const {
+            email, 
+            username, 
+            password, 
+            fullname, 
+            avatar_link,
+            imageCoverLink,
+        } = createUserData;
         const newUser = new this.userModel({
             email, 
             username,
             password,
             fullname,
-            avatar_link
+            avatar_link,
+            imageCoverLink,
         });
         return this.buildUserResponse(await newUser.save());
     }
@@ -70,13 +78,25 @@ export class UserService {
     }
 
     private buildUserResponse(userData: IUser): IUserResponse{
-        const {id, email, username, fullname, avatar_link, role, status, createdAt, updatedAt} = userData;
+        const { 
+            id,
+            email,
+            username,
+            fullname,
+            avatar_link,
+            imageCoverLink,
+            role,
+            status,
+            createdAt,
+            updatedAt 
+        } = userData;
         const response: IUserResponse = {
             id,
             email,
             username,
             fullname,
             avatar_link,
+            imageCoverLink,
             role,
             status,
             createdAt,

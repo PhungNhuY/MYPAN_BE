@@ -6,6 +6,7 @@ export interface IUser extends Document{
     password: string;
     fullname?: string;
     avatar_link?: string;
+    imageCoverLink?: string;
     role?: string;
     status?: string;
     createdAt?: string;

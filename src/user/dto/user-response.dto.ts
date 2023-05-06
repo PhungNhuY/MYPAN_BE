@@ -4,6 +4,7 @@ export interface IUserResponse{
     username: string;
     fullname: string;
     avatar_link: string;
+    imageCoverLink: string;
     role: string;
     status: string;
     createdAt: string;

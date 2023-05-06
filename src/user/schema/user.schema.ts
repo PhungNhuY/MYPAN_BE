@@ -55,6 +55,14 @@ export const UserSchema = new Schema(
             ],
             default: null,
         },
+        imageCoverLink: {
+            type: String,
+            match: [
+                /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
+                'invalid url',
+            ],
+            default: null,
+        },
         role: {
             type: String,
             enum: {
