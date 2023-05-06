@@ -1,19 +1,31 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Patch, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Patch, Post, Query, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PostService } from './post.service';
 import { JwtAuthenticationGuard } from 'src/jwt/jwt-authentication.guard';
 import { buildSuccessResponse } from 'src/common/custom-response';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { ObjectIdValidationPipe } from 'src/common/objectid-validation.pipe';
+import { IQuery } from 'src/common/interfaces';
 
 @Controller('post')
 export class PostController {
     constructor(private readonly postService: PostService) { }
     
-    @Get()
+    @Get('list')
     @HttpCode(200)
-    async findAll() {
-        const posts = await this.postService.find();
+    @UseGuards(JwtAuthenticationGuard)
+    async findAll(@Req() req, @Query() query:IQuery) {
+        query.id = req.user.id;
+        const {posts, total} = await this.postService.find(query);
+        return buildSuccessResponse({ posts, total });
+    }
+
+    @Get('list/:id')
+    @HttpCode(200)
+    @UseGuards(JwtAuthenticationGuard)
+    async findAllById(@Req() req, @Query() query:IQuery) {
+        query.id = req.user.id;
+        const posts = await this.postService.find(query);
         return buildSuccessResponse({ posts });
     }
     
