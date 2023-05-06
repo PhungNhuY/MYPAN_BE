@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IUser } from './user.interface';
@@ -7,6 +7,7 @@ import { IUserResponse } from './dto/user-response.dto';
 import { LoginDto } from 'src/auth/dto/login.dto';
 import {compare} from 'bcrypt';
 import { EUserStatus } from './schema/user.schema';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -51,6 +52,21 @@ export class UserService {
         );
 
         return this.buildUserResponse(user);
+    }
+
+    async updateWithAuth(userId: string, updateUserData:UpdateUserDto){
+        const user = await this.userModel.findById(userId);
+        if(!user) throw new NotFoundException();
+
+        // remove undefine property
+        Object.keys(updateUserData).forEach(key => updateUserData[key] === undefined && delete updateUserData[key]);
+
+        Object.assign(user, updateUserData);
+
+        await user.save({
+            validateBeforeSave: true,
+        });
+        return user;
     }
 
     private buildUserResponse(userData: IUser): IUserResponse{
