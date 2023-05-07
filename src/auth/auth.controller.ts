@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, HttpCode, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Headers, HttpCode, Param, Post, Query } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { buildSuccessResponse } from 'src/common/custom-response';
@@ -72,10 +72,17 @@ export class AuthController {
             process.env.CONFIRM_TOKEN_SECRET
         ) as IPayload;
 
+        const accesstoken = 
+            await this.jwtService.generateToken(
+                {id: payload.id, email: payload.email}, 
+                process.env.ACCESS_TOKEN_SECRET, 
+                process.env.ACCESS_TOKEN_LIFE,
+            );
+
         // update user status to activate
         const user = await this.userService.updateStatusById(payload.id, EUserStatus.activated);
         
-        return buildSuccessResponse(user);
+        return buildSuccessResponse({user, accesstoken});
     }
 
     @Get('refresh')
@@ -99,5 +106,26 @@ export class AuthController {
             process.env.ACCESS_TOKEN_LIFE,
         );
         return buildSuccessResponse({accesstoken});
+    }
+
+    @Get('forgot/:email')
+    @HttpCode(200)
+    async fogotPassword(@Param('email') email: string){
+        const user = await this.userService.findOne({email});
+
+        // gen token
+        const payload: IPayload = {
+            id: user.id,
+            email: user.email,
+        };
+        const confirmtoken = 
+            await this.jwtService.generateToken(
+                payload, 
+                process.env.CONFIRM_TOKEN_SECRET, 
+                process.env.CONFIRM_TOKEN_LIFE,
+            );
+        // send mail
+        await this.mailService.sendFogotPassConfirmation(user.email, confirmtoken);
+        return buildSuccessResponse();
     }
 }

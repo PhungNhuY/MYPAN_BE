@@ -11,7 +11,7 @@ export class CloudinaryService {
             const upload = v2.uploader.upload_stream(
                 { folder: 'mypan' },
                 (error, result) => {
-                    console.error('--->>> cloudinary error: ', error);
+                    if(error) console.error('--->>> cloudinary error: ', error);
                     if (error) return reject(error);
                     resolve(result);
                 }

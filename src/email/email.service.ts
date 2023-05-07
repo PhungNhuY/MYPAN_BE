@@ -13,8 +13,28 @@ export class EmailService {
             await this.mailerService.sendMail({
                 to: email,
                 // from: '"Support Team" <support@example.com>', // override default from
-                subject: `Welcome to ${process.env.APP_NAME}! Confirm your Email`,
+                subject: `${process.env.APP_NAME} xin chào!`,
                 template: './confirmation', // `.hbs` extension is appended automatically // ???
+                context: { // ✏️ filling curly brackets with content
+                    name: email,
+                    url,
+                },
+            });
+            console.log(`mail sent to ${email}`);
+        } catch (error) {
+            console.log('--->>> mailing service error: ', error);
+        }
+    }
+
+    async sendFogotPassConfirmation(email: string, token: string) {
+        try {
+            const url = `${process.env.DOMAIN}/auth/forgot?token=${token}`;
+
+            await this.mailerService.sendMail({
+                to: email,
+                // from: '"Support Team" <support@example.com>', // override default from
+                subject: `${process.env.APP_NAME} Xin chào! `,
+                template: './forgotPassword', // `.hbs` extension is appended automatically // ???
                 context: { // ✏️ filling curly brackets with content
                     name: email,
                     url,
