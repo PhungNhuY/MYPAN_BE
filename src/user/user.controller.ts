@@ -27,6 +27,15 @@ export class UserController {
         return buildSuccessResponse({user});
     }
 
+    @Get('/username/:username')
+    @HttpCode(200)
+    async getUserByUsername(
+        @Param('username') username: string,
+    ){
+        const user = await this.userService.findOne({username});
+        return buildSuccessResponse({user});
+    }
+
     @Patch()
     @HttpCode(200)
     @UseGuards(JwtAuthenticationGuard)

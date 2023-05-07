@@ -22,11 +22,10 @@ export class PostController {
 
     @Get('list/:id')
     @HttpCode(200)
-    @UseGuards(JwtAuthenticationGuard)
-    async findAllById(@Req() req, @Query() query:IQuery) {
-        query.id = req.user.id;
-        const posts = await this.postService.find(query);
-        return buildSuccessResponse({ posts });
+    async findAllById(@Param('id', new ObjectIdValidationPipe()) id: string, @Query() query:IQuery) {
+        query.id = id;
+        const {posts, total} = await this.postService.find(query);
+        return buildSuccessResponse({ posts, total });
     }
     
     @Get(':id')
