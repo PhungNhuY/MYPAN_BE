@@ -25,6 +25,8 @@ export class AuthController {
         const payload: IPayload = {
             id: user.id,
             email: user.email,
+            role: user.role,
+            status: user.status,
         };
         const confirmtoken = 
             await this.jwtService.generateToken(
@@ -47,6 +49,8 @@ export class AuthController {
         const payload: IPayload = {
             id: user.id,
             email: user.email,
+            role: user.role,
+            status: user.status,
         };
         const accesstoken = 
             await this.jwtService.generateToken(
@@ -74,7 +78,12 @@ export class AuthController {
 
         const accesstoken = 
             await this.jwtService.generateToken(
-                {id: payload.id, email: payload.email}, 
+                {
+                    id: payload.id, 
+                    email: payload.email,
+                    role: payload.role,
+                    status: payload.status,
+                }, 
                 process.env.ACCESS_TOKEN_SECRET, 
                 process.env.ACCESS_TOKEN_LIFE,
             );
@@ -99,6 +108,8 @@ export class AuthController {
         const payload: IPayload = {
             id: user.id,
             email: user.email,
+            role: user.role,
+            status: user.status,
         };
         const accesstoken = await this.jwtService.generateToken(
             payload, 
@@ -117,6 +128,8 @@ export class AuthController {
         const payload: IPayload = {
             id: user.id,
             email: user.email,
+            role: user.role,
+            status: user.status,
         };
         const confirmtoken = 
             await this.jwtService.generateToken(
