@@ -18,7 +18,18 @@ export class CollectionService {
     }
 
     async find(query?: any){
-        const collections = await this.collectionModel.find();
+        const collections = await this.collectionModel.find()
+            .sort({createdAt: -1}).populate({
+                path: 'posts',
+                select: { 'author': 1, 'name': 1, 'imageCoverLink': 1, 'description': 1},
+                populate:[
+                    {
+                        path: 'author',
+                        select: { 'fullname': 1, 'avatar_link': 1, 'username': 1},
+                    },
+                ],
+            })
+        ;
         return collections; 
     }
 
