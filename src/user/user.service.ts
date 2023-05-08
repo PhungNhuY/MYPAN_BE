@@ -52,6 +52,20 @@ export class UserService {
         return this.buildUserResponse(user);
     }
 
+    async changePassword(userId: string, oldPass: string, newPass: string){
+        // find user in database
+        const user = await this.userModel.findOne({ _id: userId }).select('+password');
+        if(!user) throw new BadRequestException();
+        
+        // compare password
+        const isMatch = await compare(oldPass, user.password);
+        if(!isMatch) throw new BadRequestException(['Mật khẩu không đúng']);
+
+        user.password = newPass;
+        await user.save();
+        return this.buildUserResponse(user);
+    }
+
     async updateStatusById(id: string, status: EUserStatus){
         const user = await this.userModel.findByIdAndUpdate(
             id, 

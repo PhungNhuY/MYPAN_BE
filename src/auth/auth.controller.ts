@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, HttpCode, Param, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Headers, HttpCode, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { buildSuccessResponse } from 'src/common/custom-response';
@@ -7,6 +7,7 @@ import { EmailService } from 'src/email/email.service';
 import { UserService } from 'src/user/user.service';
 import { EUserStatus } from 'src/user/schema/user.schema';
 import { IPayload } from './interfaces';
+import { JwtAuthenticationGuard } from 'src/jwt/jwt-authentication.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -66,6 +67,20 @@ export class AuthController {
             );
 
         return buildSuccessResponse({user, accesstoken, refreshtoken});
+    }
+
+    @Post('updatePassword')
+    @UseGuards(JwtAuthenticationGuard)
+    async changePassword(
+        @Req() req, 
+        @Body() data: {oldPass: string; newPass: string}
+    ){
+        const user = await this.userService.changePassword(
+            req.user.id, 
+            data.oldPass,
+            data.newPass,
+        );
+        return buildSuccessResponse({user});
     }
 
     @Get('confirm')
