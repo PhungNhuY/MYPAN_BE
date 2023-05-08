@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { ICollection } from './collection.interface';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
+import { ECollectionCategory, ECollectionStatus } from './schema/collection.schema';
 
 @Injectable()
 export class CollectionService {
@@ -16,9 +17,44 @@ export class CollectionService {
         return await newCollection.save();
     }
 
-    async find(){
+    async find(query?: any){
         const collections = await this.collectionModel.find();
         return collections; 
+    }
+
+    async getBanner(){
+        const banner = await this.collectionModel.findOne({
+            category: ECollectionCategory.banner,
+            status: ECollectionStatus.activated,
+        }).sort({createdAt: -1}).populate({
+            path: 'posts',
+            select: { 'author': 1, 'name': 1, 'imageCoverLink': 1, 'description': 1},
+            populate:[
+                {
+                    path: 'author',
+                    select: { 'fullname': 1, 'avatar_link': 1, 'username': 1},
+                },
+            ],
+        });
+        return banner;
+    }
+
+    async getActiveCollection(){
+        const banner = await this.collectionModel.find({
+            // category: ECollectionCategory.banner,
+            $or: [{category: ECollectionCategory.normal,}, {category: ECollectionCategory.season,}],
+            status: ECollectionStatus.activated,
+        }).sort({createdAt: -1}).populate({
+            path: 'posts',
+            select: { 'author': 1, 'name': 1, 'imageCoverLink': 1, 'description': 1},
+            populate:[
+                {
+                    path: 'author',
+                    select: { 'fullname': 1, 'avatar_link': 1, 'username': 1},
+                },
+            ],
+        });
+        return banner;
     }
 
     async findById(id: string){

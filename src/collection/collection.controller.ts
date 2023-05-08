@@ -5,6 +5,7 @@ import { buildSuccessResponse } from 'src/common/custom-response';
 import { JwtAuthenticationGuard } from 'src/jwt/jwt-authentication.guard';
 import { ObjectIdValidationPipe } from 'src/common/objectid-validation.pipe';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
+import { ECollectionCategory } from './schema/collection.schema';
 
 @Controller('collection')
 export class CollectionController {
@@ -34,8 +35,21 @@ export class CollectionController {
         return buildSuccessResponse({collection});
     }
 
+    @Get('banner')
+    @HttpCode(200)
+    async getBanner(){
+        const bannerCollection = await this.collectionService.getBanner();
+        return buildSuccessResponse({banner: bannerCollection});
+    }
+
+    @Get('active')
+    @HttpCode(200)
+    async getActive(){
+        const collections = await this.collectionService.getActiveCollection();
+        return buildSuccessResponse({collections});
+    }
+
     @Get()
-    @UseGuards(JwtAuthenticationGuard)
     @HttpCode(200)
     async findAll() {
         const collections = await this.collectionService.find();
