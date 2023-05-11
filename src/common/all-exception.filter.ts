@@ -39,21 +39,25 @@ export class AllExceptionsFilter implements ExceptionFilter {
         else if(exception.name == 'ValidationError'){
             httpStatus = HttpStatus.BAD_REQUEST;
             responseBody = buildErrorResponse(
-                'Validation Error',
+                // 'Validation Error',
+                'Lỗi: ',
                 Object.values(exception.errors).map((e: any) => e.message)
             );
         }
 
         else if(exception.name == 'JsonWebTokenError' || exception.name == 'TokenExpiredError'){
             httpStatus = HttpStatus.UNAUTHORIZED;
-            responseBody = buildErrorResponse('Unauthorized');
+            // responseBody = buildErrorResponse('Unauthorized');
+            responseBody = buildErrorResponse('Không được xác thực');
         }
 
         else if(exception.code == 11000){
             httpStatus = HttpStatus.BAD_REQUEST;
             responseBody = buildErrorResponse(
-                'duplicate value',
-                Object.keys(exception.keyValue).map(e => `${e} has been duplicated`)
+                // 'duplicate value',
+                // Object.keys(exception.keyValue).map(e => `${e} has been duplicated`)
+                'Trùng dữ liệu',
+                Object.keys(exception.keyValue).map(e => `${e} đã tồn tại`)
             );
         }
 

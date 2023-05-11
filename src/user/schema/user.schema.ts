@@ -18,12 +18,12 @@ export const UserSchema = new Schema(
     {
         email: {
             type: String,
-            required: [true, 'missing email address'],
-            unique: [true, 'email already exsits'],
+            required: [true, 'Thiếu địa chỉ email'],
+            unique: [true, 'Địa chỉ email này đã được đăng ký tài khoản'],
             trim: 'true',
             match: [
                 /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                'email is invalid',
+                'Địa chỉ email không hợp lệ',
             ],
         },
         username:{
@@ -32,26 +32,25 @@ export const UserSchema = new Schema(
             unique: true,
             match:[
                 /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
-                'username is invalid'
+                'Tên tài khoản không hợp lệ'
             ],
         },
         password: {
             type: String,
-            required: [true, 'missing password'],
-            minLength: [8, 'password too short'],
+            required: [true, 'Thiếu mật khẩu'],
+            minLength: [8, 'Mật khẩu phải có ít nhất 8 kí tự'],
             select: false,
         },
         fullname: {
             type: String,
-            required: [true, 'missing fullname'],
-            minLength:[3, 'name too short'],
-            maxLength:[50, 'name too long']
+            required: [true, 'Thiếu họ tên'],
+            maxLength:[50, 'Họ tên chỉ cho phép tối đa 50 ký tự']
         },
         avatar_link: {
             type: String,
             match: [
                 /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
-                'invalid url',
+                'url không hợp lệ',
             ],
             default: null,
         },
@@ -59,7 +58,7 @@ export const UserSchema = new Schema(
             type: String,
             match: [
                 /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
-                'invalid url',
+                'url không hợp lệ',
             ],
             default: null,
         },
@@ -67,7 +66,7 @@ export const UserSchema = new Schema(
             type: String,
             enum: {
                 values: Object.keys(EUserRole),
-                message: 'Role \'{VALUE}\' is invalid',
+                message: 'Không tồn tại quyền \'{VALUE}\'',
             },
             default: EUserRole.user,
         },
@@ -75,7 +74,7 @@ export const UserSchema = new Schema(
             type: String,
             enum: {
                 values: Object.keys(EUserStatus),
-                message: 'Status \'{VALUE}\' is invalid',
+                message: 'Trạng thái \'{VALUE}\' không hợp lệ',
             },
             default: EUserStatus.inactivated,
         },
