@@ -43,11 +43,11 @@ export class UserService {
     async login(loginData: LoginDto):Promise<IUserResponse>{
         // find user in database
         const user = await this.userModel.findOne({ email: loginData.email }).select('+password');
-        if(!user) throw new BadRequestException(['user name or password does not match']);
+        if(!user) throw new BadRequestException(['Tên tài khoản hoặc mật khẩu không đúng']);
 
         // compare password
         const isMatch = await compare(loginData.password, user.password);
-        if(!isMatch) throw new BadRequestException(['user name or password does not match']);
+        if(!isMatch) throw new BadRequestException(['Tên tài khoản hoặc mật khẩu không đúng']);
 
         return this.buildUserResponse(user);
     }

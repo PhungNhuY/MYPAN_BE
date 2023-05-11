@@ -18,7 +18,7 @@ export const CollectionSchema = new Schema(
     {
         name: {
             type: String,
-            required: [true, 'missing collection name'],
+            required: [true, 'Thiếu tên bộ sưu tập'],
         },
         description: {
             type: String,
@@ -27,7 +27,7 @@ export const CollectionSchema = new Schema(
             type: String,
             match: [
                 /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
-                'invalid url',
+                'url không hợp lệ',
             ],
         },
         posts: [{
@@ -38,17 +38,17 @@ export const CollectionSchema = new Schema(
             type: String,
             enum: {
                 values: Object.keys(ECollectionCategory),
-                message: 'Category \'{VALUE}\' is invalid',
+                message: 'Phân loại \'{VALUE}\' không hợp lệ',
             },
-            required: [true, 'missing collection category'],
+            required: [true, 'Thiếu phân loại'],
         },
         status: {
             type: String,
             enum: {
                 values: Object.keys(ECollectionStatus),
-                message: 'Status \'{VALUE}\' is invalid',
+                message: 'Trạng thái \'{VALUE}\' không hợp lệ',
             },
-            required: [true, 'missing collection status'],
+            required: [true, 'Thiếu trang thái bộ sưu tập'],
         }
     },
     {
@@ -59,14 +59,14 @@ export const CollectionSchema = new Schema(
 CollectionSchema.pre('save', async function(next) {
     // check length
     if(this.posts.length == 0){
-        return next(new BadRequestException('Missing posts'));
+        return next(new BadRequestException('Cần có ít nhất 1 bài viết'));
     }
 
     // check valid ObjectId
     const ObjectId = Types.ObjectId;
     this.posts.forEach((post) => {
         if (!ObjectId.isValid(post))
-            throw new BadRequestException('Invalid postId');
+            throw new BadRequestException('Id bài viết không hợp lệ');
     });
 
     next();

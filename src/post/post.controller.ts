@@ -20,9 +20,11 @@ export class PostController {
         return buildSuccessResponse({ posts, total });
     }
 
+    // get list of post with author id, use in profile page
     @Get('list/:id')
     @HttpCode(200)
     async findAllById(@Param('id', new ObjectIdValidationPipe()) id: string, @Query() query:IQuery) {
+        // this is authorId
         query.id = id;
         const {posts, total} = await this.postService.find(query);
         return buildSuccessResponse({ posts, total });
@@ -107,8 +109,8 @@ export class PostController {
         @Req() req,
         @Param('id', new ObjectIdValidationPipe()) postId: string
     ){
-        const isDeleted = this.postService.delete(req.user.id, postId);
-        if(!isDeleted) throw new NotFoundException();
+        const isDeleted = await this.postService.delete(req.user.id, postId);
+        if(!isDeleted) throw new NotFoundException('Món ăn không tồn tại');
         return buildSuccessResponse();
     }
 }

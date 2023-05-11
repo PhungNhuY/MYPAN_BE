@@ -4,12 +4,12 @@ export const PostSchema = new Schema(
     {
         author:{
             type: SchemaTypes.ObjectId,
-            required: [true, 'missing author id'],
+            required: [true, 'Thiếu author_id'],
             ref: 'User',
         },
         name: {
             type: String,
-            required: [true, 'missing name'],
+            required: [true, 'Thiếu tên món ăn'],
             maxLength: 1000,
         },
         description:{
@@ -20,24 +20,25 @@ export const PostSchema = new Schema(
             type: String,
             match: [
                 /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
-                'invalid url',
+                'url không hợp lệ',
             ],
         },
         ration:{
             type: Number,
-            min: [1, 'min 1 ration'],
-            max: [10, 'max 10 ration'],
+            min: [1, 'Số khảu phần ăn không được nhỏ hơn 1'],
+            max: [10, 'Số khảu phần ăn không được lớn hơn 10'],
         },
         time: {
             type: Number,
-            min: [1, 'min 1 minute'],
-            max: [43200, 'max 43200 minute'],
+            min: [1, 'Thời gian nấu ít nhất là 1 phút'],
+            max: [43200, 'Thời gian nấu không được vượt quá 43200 phút'],
         },
         ingredients:{
             type: [{
                 _id: false,
                 name: {
                     type: String,
+                    required: [true, 'Nguyên liệu cần phải có nội dung'],
                 },
                 quantity: {
                     type: String,
@@ -49,15 +50,15 @@ export const PostSchema = new Schema(
             _id: false,
             content:{
                 type: String,
-                required: true,
-                maxLength: [10000, 'step too long'],
+                required: [true, 'Mỗi bước cần phải có nội dung'],
+                maxLength: [10000, 'Nội dung bước quá dài, tối đa 1000 ký tự'],
             },
             imageLink:{
                 type: [{
                     type: String,
                     match: [
                         /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/,
-                        'invalid url',
+                        'url không hợp lệ',
                     ]
                 }],
                 validate: [ImageEachStepLimit, 'Tối đa 3 ảnh minh họa cho một bước'],
