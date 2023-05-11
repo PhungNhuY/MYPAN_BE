@@ -60,6 +60,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
                 Object.keys(exception.keyValue).map(e => `${e} đã tồn tại`)
             );
         }
+        
+        else if(exception.name == 'CastError'){
+            httpStatus = HttpStatus.BAD_REQUEST;
+            responseBody = buildErrorResponse(
+                'CastError',
+                ['Dữ liệu không hợp lệ']
+            );
+        }
 
         else {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
