@@ -49,6 +49,11 @@ export class UserService {
         const isMatch = await compare(loginData.password, user.password);
         if(!isMatch) throw new BadRequestException(['Tên tài khoản hoặc mật khẩu không đúng']);
 
+        // check active account
+        if(user.status != EUserStatus.activated){
+            throw new BadRequestException(['Bạn cần xác nhận địa chỉ email trước khi đăng nhập']);
+        }
+
         return this.buildUserResponse(user);
     }
 
