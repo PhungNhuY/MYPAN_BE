@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IPost } from './post.interface';
@@ -43,19 +43,17 @@ export class PostService {
     }
 
     async updateWithAuth(userId: string, postId: string, updatePostData: UpdatePostDto){
-        const post = await this.postModel.findOneAndUpdate(
-            {
-                author: userId,
-                _id: postId,
-            },
-            {
-                ...updatePostData,
-            },
-            {
-                new: true,
-                runValidators: true,
-            }
-        );
+        const post = await this.postModel.findOne({_id: postId, author: userId});
+        if(!post) throw new NotFoundException();
+
+        // remove undefine property
+        Object.keys(updatePostData).forEach(key => updatePostData[key] === undefined && delete updatePostData[key]);
+
+        Object.assign(post, updatePostData);
+        
+        await post.save({
+            validateBeforeSave: true
+        });
         return post;
     }
 
