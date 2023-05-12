@@ -45,4 +45,22 @@ export class EmailService {
             console.log('--->>> mailing service error: ', error);
         }
     }
+
+    async sendViolationWarning(email: string, name: string, postName: string){
+        try {
+            await this.mailerService.sendMail({
+                to: email,
+                // from: '"Support Team" <support@example.com>', // override default from
+                subject: `${process.env.APP_NAME} Xin chào! `,
+                template: './violate', // `.hbs` extension is appended automatically // ???
+                context: { // ✏️ filling curly brackets with content
+                    name: email,
+                    postName: postName,
+                },
+            });
+            console.log(`mail sent to ${email}`);
+        } catch (error) {
+            console.log('--->>> mailing service error: ', error);
+        }
+    }
 }

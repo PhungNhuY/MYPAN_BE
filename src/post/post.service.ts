@@ -64,4 +64,9 @@ export class PostService {
         });
         return !!post;
     }
+
+    async deleteViolate(postId: string){
+        const post = await this.postModel.findByIdAndDelete(postId);
+        return !!post;
+    }
 }

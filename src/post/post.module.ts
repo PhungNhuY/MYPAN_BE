@@ -12,6 +12,7 @@ import { JwtService } from 'src/jwt/jwt.service';
         ]),
     ],
     controllers: [PostController],
-    providers: [PostService, JwtService]
+    providers: [PostService, JwtService],
+    exports: [PostService]
 })
 export class PostModule {}
