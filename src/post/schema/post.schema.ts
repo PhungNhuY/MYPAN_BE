@@ -1,4 +1,5 @@
 import { Schema, SchemaTypes } from 'mongoose';
+import { removeVietnameseTones } from 'src/common/language-handle';
 
 export const PostSchema = new Schema(
     {
@@ -11,6 +12,9 @@ export const PostSchema = new Schema(
             type: String,
             required: [true, 'Thiếu tên món ăn'],
             maxLength: 1000,
+        },
+        nameForSearch: {
+            type: String,
         },
         description:{
             type: String,
@@ -77,5 +81,12 @@ function ImageEachStepLimit(val) {
 function IngreLimit(val) {
     return val.length <= 100;
 }
+
+PostSchema.pre('save', async function(next) {
+    if(this.isModified('name')){
+        this.nameForSearch = removeVietnameseTones(this.name);
+    }
+    next();
+});
 
 PostSchema.index({author: 1, name: 1}, {unique: true});
