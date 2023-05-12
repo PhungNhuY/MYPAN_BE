@@ -48,4 +48,9 @@ export class ReportService {
         const newReport = new this.reportModel({post: postId});
         return await newReport.save();
     }
+
+    async delete(reportId: string): Promise<IReport>{
+        const report = await this.reportModel.findByIdAndDelete(reportId);
+        return report;
+    }
 }

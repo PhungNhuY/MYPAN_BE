@@ -1,13 +1,19 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthenticationGuard } from 'src/jwt/jwt-authentication.guard';
 import { IQuery } from 'src/common/interfaces';
 import { ReportService } from './report.service';
 import { buildSuccessResponse } from 'src/common/custom-response';
 import { ObjectIdValidationPipe } from 'src/common/objectid-validation.pipe';
+import { PostService } from 'src/post/post.service';
+import { EmailService } from 'src/email/email.service';
 
 @Controller('report')
 export class ReportController {
-    constructor(private readonly reportService: ReportService){}
+    constructor(
+        private readonly reportService: ReportService,
+        private readonly postService: PostService,
+        private readonly emailService: EmailService
+    ){}
 
     @Get()
     @HttpCode(200)
@@ -32,6 +38,38 @@ export class ReportController {
             report.numOfReport++;
             await report.save();
         }
+        return buildSuccessResponse();
+    }
+
+    // when post no violate just delete report
+    @Get('noViolate/:id')
+    @UseGuards(JwtAuthenticationGuard)
+    async noViolate(
+        @Param('id', new ObjectIdValidationPipe()) reportId: string
+    ){
+        await this.reportService.delete(reportId);
+        return buildSuccessResponse();
+    }
+
+    // when post violate delete report, post, send mail to user
+    @Get('violate/:id')
+    @UseGuards(JwtAuthenticationGuard)
+    async violate(
+        @Param('id', new ObjectIdValidationPipe()) reportId: string
+    ){
+        // delete report
+        const report = await this.reportService.delete(reportId);
+
+        // get post
+        const post: any = await this.postService.findById(report.post);
+
+        // delete post
+        const deleted = await this.postService.deleteViolate(report.post);
+
+        //send mail
+        // send mail
+        await this.emailService.sendViolationWarning(post.author.email, post.author.name, post.name);
+
         return buildSuccessResponse();
     }
 }
