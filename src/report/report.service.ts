@@ -28,7 +28,7 @@ export class ReportService {
         const total = await this.reportModel.find().count();
         const reports = await q.populate({
             path: 'post',
-            select: { 'author': 1, 'name': 1, 'imageCoverLink': 1, 'description': 1},
+            select: { 'author': 1, 'name': 1, 'imageCoverLink': 1, 'description': 1, 'createdAt': 1},
             populate:[
                 {
                     path: 'author',
