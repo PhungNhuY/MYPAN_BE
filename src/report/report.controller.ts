@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpCode, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthenticationGuard } from 'src/jwt/jwt-authentication.guard';
 import { IQuery } from 'src/common/interfaces';
 import { ReportService } from './report.service';
@@ -29,6 +29,8 @@ export class ReportController {
         @Req() req, 
         @Param('id', new ObjectIdValidationPipe()) postId: string,
     ){
+        const post = await this.postService.findById(postId);
+        if(!post) throw new BadRequestException('Bài viết không tồn tại');
         const report = await this.reportService.findByPostId(postId);
         if(!report){
             // if not exists -> create new
