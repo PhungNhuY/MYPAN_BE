@@ -6,6 +6,7 @@ import { buildSuccessResponse } from 'src/common/custom-response';
 import { ObjectIdValidationPipe } from 'src/common/objectid-validation.pipe';
 import { PostService } from 'src/post/post.service';
 import { EmailService } from 'src/email/email.service';
+import { AdminGuard } from 'src/common/admin.guard';
 
 @Controller('report')
 export class ReportController {
@@ -17,6 +18,7 @@ export class ReportController {
 
     @Get()
     @HttpCode(200)
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthenticationGuard)
     async findAll(@Query() query: IQuery){
         const {reports, total} = await this.reportService.find(query);
@@ -45,6 +47,7 @@ export class ReportController {
 
     // when post no violate just delete report
     @Get('noViolate/:id')
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthenticationGuard)
     async noViolate(
         @Param('id', new ObjectIdValidationPipe()) reportId: string
@@ -55,6 +58,7 @@ export class ReportController {
 
     // when post violate delete report, post, send mail to user
     @Get('violate/:id')
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthenticationGuard)
     async violate(
         @Param('id', new ObjectIdValidationPipe()) reportId: string

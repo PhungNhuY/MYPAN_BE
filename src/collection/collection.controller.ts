@@ -6,12 +6,14 @@ import { JwtAuthenticationGuard } from 'src/jwt/jwt-authentication.guard';
 import { ObjectIdValidationPipe } from 'src/common/objectid-validation.pipe';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { ECollectionCategory } from './schema/collection.schema';
+import { AdminGuard } from 'src/common/admin.guard';
 
 @Controller('collection')
 export class CollectionController {
     constructor(private readonly collectionService: CollectionService){}
 
     @Post()
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthenticationGuard)
     async create(@Req() req, @Body() createCollectionData: CreateCollectionDto) {
         const {
@@ -50,6 +52,7 @@ export class CollectionController {
     }
 
     @Get()
+    @UseGuards(AdminGuard)
     @HttpCode(200)
     async findAll() {
         const collections = await this.collectionService.find();
@@ -68,6 +71,7 @@ export class CollectionController {
 
     @Patch(':id')
     @HttpCode(200)
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthenticationGuard)
     async updateOne(
         @Req() req,
@@ -102,6 +106,7 @@ export class CollectionController {
 
     @Delete(':id')
     @HttpCode(200)
+    @UseGuards(AdminGuard)
     @UseGuards(JwtAuthenticationGuard)
     async delete(
         @Req() req,
