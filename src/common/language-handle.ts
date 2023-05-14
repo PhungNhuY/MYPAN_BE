@@ -24,5 +24,6 @@ export function removeVietnameseTones(str) {
     // Bỏ các khoảng trắng liền nhau
     str = str.replace(/ + /g,' ');
     str = str.trim();
+    str = str.toLowerCase();
     return str;
 }
