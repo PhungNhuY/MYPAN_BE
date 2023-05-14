@@ -15,7 +15,7 @@ import { ReportModule } from './report/report.module';
         ConfigModule.forRoot({
             isGlobal: true,
         }),
-        MongooseModule.forRoot(process.env.DB_LINK),
+        MongooseModule.forRoot(`${process.env.DB_LINK}/${process.env.DB_NAME}`),
         UserModule,
         AuthModule,
         PostModule,
