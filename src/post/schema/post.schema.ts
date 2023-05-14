@@ -89,4 +89,12 @@ PostSchema.pre('save', async function(next) {
     next();
 });
 
-PostSchema.index({author: 1, name: 1}, {unique: true});
+PostSchema.index(
+    {nameForSearch: 'text', 'ingredients.name': 'text'}, 
+    { 
+        weights: { 
+            nameForSearch: 2, 
+            'ingredients.name': 1 
+        }
+    }
+);

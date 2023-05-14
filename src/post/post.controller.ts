@@ -29,6 +29,13 @@ export class PostController {
         const {posts, total} = await this.postService.find(query);
         return buildSuccessResponse({ posts, total });
     }
+
+    @Get('search/:text')
+    @HttpCode(200)
+    async search(@Param('text') text: string, @Query() query:IQuery){
+        const {posts, total} = await this.postService.search(text, query);
+        return buildSuccessResponse({posts, total});
+    }
     
     @Get(':id')
     @HttpCode(200)
