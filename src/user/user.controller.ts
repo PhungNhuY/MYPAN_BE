@@ -48,7 +48,6 @@ export class UserController {
             email,
             avatar_link,
             fullname,
-            password,
             status,
             imageCoverLink,
         } = updateUserData;
@@ -60,7 +59,6 @@ export class UserController {
                 email,
                 avatar_link,
                 fullname,
-                password,
                 status,
                 imageCoverLink
             }

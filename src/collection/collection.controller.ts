@@ -53,6 +53,7 @@ export class CollectionController {
 
     @Get()
     @UseGuards(AdminGuard)
+    @UseGuards(JwtAuthenticationGuard)
     @HttpCode(200)
     async findAll() {
         const collections = await this.collectionService.find();
