@@ -69,4 +69,27 @@ export class PostService {
         const post = await this.postModel.findByIdAndDelete(postId);
         return !!post;
     }
+
+    async search(searchString: string, query: IQuery){
+        let q = this.postModel.find(
+            {$text: {$search: searchString}},
+            {score : { $meta: 'textScore' }}
+        ).sort( 
+            { score: { $meta : 'textScore' } } 
+        ).populate('author');
+
+        // pagination
+        const page = query.page || 1;
+        const limit = query.perPage || 10;
+        const skip = (page - 1) * limit;
+        q = q.skip(skip).limit(limit);
+
+        // count total
+        const total = await this.postModel.find(
+            {$text: {$search: searchString}}
+        ).count();
+
+        const posts = await q;
+        return {posts, total};
+    }
 }
