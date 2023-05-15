@@ -10,6 +10,7 @@ import { CollectionModule } from './collection/collection.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ReportModule } from './report/report.module';
 import { LikeModule } from './like/like.module';
+import { SavePostModule } from './save-post/save-post.module';
 
 @Module({
     imports: [
@@ -25,6 +26,7 @@ import { LikeModule } from './like/like.module';
         CloudinaryModule,
         ReportModule,
         LikeModule,
+        SavePostModule,
     ],
     controllers: [AppController],
 })
