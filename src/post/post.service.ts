@@ -62,7 +62,7 @@ export class PostService {
             author: userId,
             _id: postId,
         });
-        return !!post;
+        return post;
     }
 
     async deleteViolate(postId: string){

@@ -16,6 +16,7 @@ import { EmailModule } from 'src/email/email.module';
         EmailModule,
     ],
     controllers: [ReportController],
-    providers: [ReportService, JwtService]
+    providers: [ReportService, JwtService],
+    exports: [ReportService],
 })
 export class ReportModule { }

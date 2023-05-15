@@ -12,6 +12,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         ]),
     ],
     providers: [SavePostService, JwtService],
-    controllers: [SavePostController]
+    controllers: [SavePostController],
+    exports: [SavePostService]
 })
 export class SavePostModule {}

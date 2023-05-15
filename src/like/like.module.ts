@@ -12,6 +12,7 @@ import { JwtService } from 'src/jwt/jwt.service';
         ]),
     ],
     providers: [LikeService, JwtService],
-    controllers: [LikeController]
+    controllers: [LikeController],
+    exports: [LikeService]
 })
 export class LikeModule {}

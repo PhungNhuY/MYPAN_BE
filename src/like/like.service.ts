@@ -35,4 +35,8 @@ export class LikeService {
         const numOfLike = await this.likeModel.find({post: postId}).count();
         return numOfLike;
     }
+
+    async deleteByPostId(postId: string){
+        await this.likeModel.deleteMany({post: postId});
+    }
 }

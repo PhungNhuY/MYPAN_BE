@@ -53,4 +53,8 @@ export class ReportService {
         const report = await this.reportModel.findByIdAndDelete(reportId);
         return report;
     }
+
+    async deleteByPostId(postId: string){
+        await this.reportModel.deleteMany({post: postId});
+    }
 }

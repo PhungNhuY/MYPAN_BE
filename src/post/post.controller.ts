@@ -6,10 +6,17 @@ import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { ObjectIdValidationPipe } from 'src/common/objectid-validation.pipe';
 import { IQuery } from 'src/common/interfaces';
+import { ReportService } from 'src/report/report.service';
+import { LikeService } from 'src/like/like.service';
+import { SavePostService } from 'src/save-post/save-post.service';
 
 @Controller('post')
 export class PostController {
-    constructor(private readonly postService: PostService) { }
+    constructor(
+        private readonly postService: PostService,
+        private readonly likeService: LikeService,
+        private readonly savePostService: SavePostService,
+    ) { }
     
     @Get('list')
     @HttpCode(200)
@@ -116,8 +123,10 @@ export class PostController {
         @Req() req,
         @Param('id', new ObjectIdValidationPipe()) postId: string
     ){
-        const isDeleted = await this.postService.delete(req.user.id, postId);
-        if(!isDeleted) throw new NotFoundException('Món ăn không tồn tại');
+        const post = await this.postService.delete(req.user.id, postId);
+        if(!post) throw new NotFoundException('Món ăn không tồn tại');
+        this.likeService.deleteByPostId(post._id);
+        this.savePostService.deleteByPostId(post._id);
         return buildSuccessResponse();
     }
 }

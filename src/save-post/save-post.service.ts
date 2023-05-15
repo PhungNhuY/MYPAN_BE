@@ -61,4 +61,8 @@ export class SavePostService {
 
         return {savePosts, total};
     }
+
+    async deleteByPostId(postId: string){
+        await this.savePostModel.deleteMany({post: postId});
+    }
 }
